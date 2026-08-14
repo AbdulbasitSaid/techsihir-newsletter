@@ -1,6 +1,6 @@
 use std::net::TcpListener;
 
-use techsihir_newsletter::run;
+use techsihir_newsletter::startup::run;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
