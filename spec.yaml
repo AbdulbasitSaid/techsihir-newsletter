@@ -1,0 +1,23 @@
+name: techsihir-newsletter
+
+region: lon1
+services:
+  - name: techsihir-newsletter
+
+    dockerfile_path: Dockerfile
+    source_dir: .
+    github:
+      branch: master
+
+      deploy_on_push: true
+      repo: AbdulbasitSaid/techsihir-newsletter
+    health_check:
+      http_path: /health_check
+
+    http_port: 8000
+
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+    routes:
+      - path: /

@@ -1,7 +1,7 @@
 [package]
 name = "techsihir-newsletter"
 version = "0.1.0"
-authors = ["Abdulbasit (techsihir) <abdulbasit@techsihir.com> "]
+# authors = ["Abdulbasit (techsihir) <abdulbasit@techsihir.com> "]
 edition = "2024"
 
 [lib]
@@ -12,27 +12,27 @@ path = "src/main.rs"
 name = "techsihir-newsletter"
 
 [dependencies]
-actix-web = "4.14.1"
-reqwest = "0.13.4"
-tokio = { version = "1.53.1", features = ["macros", "rt-multi-thread"] }
-serde = { features = ["derive"], version = "1.0.229" }
-config = "0.15"
-uuid = {version ="1.24.1", features = ["v4"]}
-tracing = {version = "0.1.44", features = ["log"]}
-tracing-subscriber = {version = "0.3.23" , features = ["registry", "env-filter"]}
-tracing-bunyan-formatter = "0.3.10"
-tracing-log = "0.2.0"
-secrecy = {version = "0.10.3" , features = ["serde"]}
-tracing-actix-web = "0.7.22"
-
-[dependencies.sqlx]
-version = "~0.8.0"
-default-features = false
-features = [
-    "runtime-tokio-rustls",
+actix-web = "4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serde = "1.0.115"
+config = { version = "0.14", default-features = false, features = ["yaml"] }
+sqlx = { version = "0.9.0", default-features = false, features = [
+    "runtime-tokio",
     "macros",
     "postgres",
     "uuid",
     "chrono",
     "migrate",
-]
+] }
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4.22", default-features = false, features = ["clock"] }
+tracing = "0.1.19"
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+tracing-bunyan-formatter = "0.3.1"
+serde-aux = "4"
+tracing-log = "0.2.0"
+tracing-actix-web = "0.7"
+secrecy = { version = "0.8", features = ["serde"] }
+
+[dev-dependencies]
+reqwest = { version = "0.12", features = ["json"] }
