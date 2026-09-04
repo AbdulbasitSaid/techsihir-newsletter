@@ -1,7 +1,8 @@
 use secrecy::Secret;
-use sqlx::{Connection, Executor, PgConnection, PgPool};
+use sqlx::{Connection, PgConnection, PgPool};
 use std::net::TcpListener;
 use std::sync::LazyLock;
+use techsihir_newsletter::configuration::{DatabaseSettings, get_configuration};
 use techsihir_newsletter::startup::run;
 use techsihir_newsletter::telemetry::{get_subscriber, init_subscriber};
 use uuid::Uuid;
@@ -56,11 +57,13 @@ pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
     let mut connection = PgConnection::connect_with(&maintenance_settings.connect_options())
         .await
         .expect("Failed to connect to Postgres");
-    connection
-        .execute(format!(r#"CREATE DATABASE "{}";"#, config.database_name).as_str())
-        .await
-        .expect("Failed to create database.");
-
+    sqlx::query(sqlx::AssertSqlSafe(format!(
+        r#"CREATE DATABASE "{}";"#,
+        config.database_name
+    )))
+    .execute(&mut connection)
+    .await
+    .expect("Failed to create database.");
     // Migrate database
     let connection_pool = PgPool::connect_with(config.connect_options())
         .await
@@ -71,7 +74,6 @@ pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
         .expect("Failed to migrate the database");
     connection_pool
 }
-
 #[tokio::test]
 async fn health_check_works() {
     // Arrange
